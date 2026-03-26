@@ -27,7 +27,15 @@ A fully-featured HTTP client with **TLS fingerprinting** (JA3/JA4, HTTP/2, QUIC)
 
 ## Quick Start
 
-### Install
+### Install as AI Skill
+
+Add fetchr to your AI coding agent (Claude Code, Cursor, Codex, Cline, etc.):
+
+```bash
+npx skills add thesatellite-ai/fetchr
+```
+
+### Install CLI Binary
 
 **One-liner (macOS/Linux):**
 
