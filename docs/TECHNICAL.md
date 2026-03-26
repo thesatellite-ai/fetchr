@@ -179,6 +179,72 @@ Logger interface
 
 ---
 
+## Contributing / Development
+
+### Prerequisites
+
+- Go 1.26+
+- [Task](https://taskfile.dev) (optional, for dev commands)
+
+### Build from Source
+
+```bash
+git clone https://github.com/thesatellite-ai/fetchr.git
+cd fetchr
+go build -o fetchr ./cmd/fetchr
+```
+
+Or with Task:
+
+```bash
+task build
+```
+
+### Dev Commands
+
+```bash
+task build         # Build binary
+task run           # Build + run MCP server (stdio)
+task run:sse       # Build + run MCP server (SSE)
+task inspect       # Open MCP inspector (stdio)
+task inspect:sse   # Open MCP inspector (SSE)
+task lint          # Run gofmt + go vet
+task tidy          # go mod tidy
+task upgrade       # Upgrade all dependencies
+task clean         # Remove build artifacts
+task version       # Print version info
+```
+
+### Project Structure
+
+```
+fetchr/
+├── cmd/fetchr/main.go           # CLI entry point (Cobra commands)
+├── pkg/curl/
+│   ├── client.go                # CycleTLS wrapper, Client struct
+│   ├── options.go               # RequestOptions, Cookie, Merge()
+│   ├── response.go              # Response struct, Format(), JSON(), JSONSmart()
+│   ├── curlcmd.go               # ToCurl() command builder
+│   └── logger.go                # Logger interface + implementations
+├── internal/
+│   ├── config/
+│   │   ├── config.go            # JSONC config parser + loader
+│   │   ├── paths.go             # Platform-aware config discovery
+│   │   └── default_config.jsonc # Embedded default config
+│   ├── mcp/
+│   │   ├── server.go            # MCP server setup
+│   │   ├── tools.go             # Tool handlers + schemas
+│   │   └── prompts.go           # Prompt definitions
+│   └── version/
+│       └── version.go           # Build-time version vars
+├── .goreleaser.yml              # Cross-compile config
+├── .github/workflows/release.yml
+├── Taskfile.yml                 # Dev tasks
+└── install.sh                   # One-click installer
+```
+
+---
+
 ## Build & Release
 
 ### Version Injection
