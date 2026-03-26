@@ -1,0 +1,25 @@
+# Binary
+/fetchr
+/fetchr.exe
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Go
+vendor/
+
+# Config (local overrides)
+fetchr.jsonc
+
+# Logs
+*.jsonl
+
+# GoReleaser
+dist/

@@ -1,0 +1,77 @@
+version: '3'
+
+vars:
+  BINARY: fetchr
+  VERSION:
+    sh: git describe --tags --always --dirty 2>/dev/null || echo "dev"
+  COMMIT:
+    sh: git rev-parse --short HEAD 2>/dev/null || echo "none"
+  DATE:
+    sh: date -u '+%Y-%m-%dT%H:%M:%SZ'
+  LDFLAGS: >-
+    -s -w
+    -X github.com/thesatellite-ai/fetchr/internal/version.Version={{.VERSION}}
+    -X github.com/thesatellite-ai/fetchr/internal/version.Commit={{.COMMIT}}
+    -X github.com/thesatellite-ai/fetchr/internal/version.Date={{.DATE}}
+
+tasks:
+  build:
+    desc: Build the binary
+    cmds:
+      - go build -ldflags "{{.LDFLAGS}}" -o {{.BINARY}} ./cmd/fetchr
+
+  run:
+    desc: Build and run MCP server (stdio)
+    deps: [build]
+    cmds:
+      - ./{{.BINARY}} serve
+
+  run:sse:
+    desc: Build and run MCP server (SSE)
+    deps: [build]
+    cmds:
+      - ./{{.BINARY}} serve --transport sse
+
+  inspect:
+    desc: Run MCP inspector (stdio)
+    deps: [build]
+    cmds:
+      - npx @modelcontextprotocol/inspector ./{{.BINARY}} serve
+
+  inspect:sse:
+    desc: Run MCP inspector (SSE)
+    cmds:
+      - npx @modelcontextprotocol/inspector
+
+  request:
+    desc: Make a quick request (pass URL as CLI_ARGS)
+    deps: [build]
+    cmds:
+      - ./{{.BINARY}} request {{.CLI_ARGS}}
+
+  lint:
+    desc: Run linters
+    cmds:
+      - gofmt -l .
+      - go vet ./...
+
+  tidy:
+    desc: Tidy go modules
+    cmds:
+      - go mod tidy
+
+  upgrade:
+    desc: Upgrade all dependencies
+    cmds:
+      - go get -u ./...
+      - go mod tidy
+
+  clean:
+    desc: Remove build artifacts
+    cmds:
+      - rm -f {{.BINARY}}
+
+  version:
+    desc: Print version info
+    cmds:
+      - echo "Version {{.VERSION}} ({{.COMMIT}}) built {{.DATE}}"
