@@ -1,6 +1,6 @@
 # fetchr
 
-A fully-featured HTTP client with **TLS fingerprinting** (JA3/JA4, HTTP/2, QUIC) — available as a CLI tool, MCP server, and importable Go package. Built on [CycleTLS](https://github.com/Danny-Dasilva/CycleTLS).
+A fully-featured HTTP client with **TLS fingerprinting** (JA3/JA4, HTTP/2, QUIC) — available as a CLI tool, MCP server, and importable Go package.
 
 ## Why fetchr?
 
@@ -71,20 +71,6 @@ Move-Item fetchr.exe C:\Windows\System32\
 
 ```bash
 sudo rm /usr/local/bin/fetchr
-```
-
-### Build from Source
-
-```bash
-git clone https://github.com/thesatellite-ai/fetchr.git
-cd fetchr
-go build -o fetchr ./cmd/fetchr
-```
-
-Or with [Task](https://taskfile.dev):
-
-```bash
-task build
 ```
 
 ---
