@@ -4,7 +4,9 @@ A fully-featured HTTP client with **TLS fingerprinting** (JA3/JA4, HTTP/2, QUIC)
 
 ## Why fetchr?
 
-Standard HTTP clients send a default TLS fingerprint that many websites use to detect and block automated requests. fetchr lets you impersonate real browsers at the TLS level — matching their JA3 hash, HTTP/2 SETTINGS frame, header order, and more — while providing a clean API for AI assistants via MCP.
+**AI assistants can't make HTTP requests.** Claude Desktop, Claude Code, and other sandboxed AI tools block outbound network calls — they can't `curl`, fetch APIs, or check if a website is up. fetchr solves this as an MCP server, giving AI assistants full HTTP capabilities.
+
+**Websites block automated requests.** Standard HTTP clients send a default TLS fingerprint that anti-bot systems detect instantly. fetchr impersonates real browsers at the TLS level — matching their JA3 hash, HTTP/2 SETTINGS frame, header order, and more — so your requests look identical to Chrome or Firefox.
 
 ## Features
 
