@@ -105,6 +105,7 @@ func requestCmd() *cobra.Command {
 		printCurl   bool
 		output      string
 		jsonOutput  bool
+		verbose     bool
 	)
 
 	cmd := &cobra.Command{
@@ -129,7 +130,6 @@ func requestCmd() *cobra.Command {
 				ForceHTTP1:         http1,
 				ForceHTTP3:         http3,
 				Profile:            profile,
-				PrintCurl:          printCurl,
 			}
 
 			if len(headers) > 0 {
@@ -152,9 +152,10 @@ func requestCmd() *cobra.Command {
 			}
 			merged := curl.Merge(base, opts)
 
+			// --print-curl: print curl command and exit (no request made)
 			if printCurl {
 				fmt.Println(curl.ToCurl(merged))
-				fmt.Println()
+				return nil
 			}
 
 			var clientOpts []curl.ClientOption
@@ -175,8 +176,9 @@ func requestCmd() *cobra.Command {
 				return os.WriteFile(output, []byte(resp.Body), 0644)
 			}
 
+			// --json: structured JSON with parsed body when Content-Type is JSON
 			if jsonOutput {
-				data, err := resp.JSON()
+				data, err := resp.JSONSmart()
 				if err != nil {
 					return err
 				}
@@ -184,7 +186,14 @@ func requestCmd() *cobra.Command {
 				return nil
 			}
 
-			fmt.Println(resp.Format())
+			// --verbose: full detail (status, headers, body, duration)
+			if verbose {
+				fmt.Println(resp.Format())
+				return nil
+			}
+
+			// Default: body only
+			fmt.Print(resp.Body)
 			return nil
 		},
 	}
@@ -203,9 +212,10 @@ func requestCmd() *cobra.Command {
 	cmd.Flags().BoolVar(&http1, "http1", false, "Force HTTP/1.1")
 	cmd.Flags().BoolVar(&http3, "http3", false, "Force HTTP/3")
 	cmd.Flags().StringVar(&profile, "profile", "", "Use named profile from config")
-	cmd.Flags().BoolVar(&printCurl, "print-curl", false, "Print equivalent curl command")
+	cmd.Flags().BoolVar(&printCurl, "print-curl", false, "Print equivalent curl command (does not execute)")
 	cmd.Flags().StringVarP(&output, "output", "o", "", "Write response body to file")
-	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Output response as JSON")
+	cmd.Flags().BoolVar(&jsonOutput, "json", false, "Output full response as JSON (body parsed when Content-Type is JSON)")
+	cmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Show full response (status, headers, body, duration)")
 
 	return cmd
 }

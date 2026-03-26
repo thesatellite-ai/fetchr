@@ -17,6 +17,10 @@ Standard HTTP clients send a default TLS fingerprint that many websites use to d
 - **Request Logging** — File (JSONL), webhook, or both
 - **JSONC Config** — JSON with comments, platform-aware auto-discovery, auto-created on first run
 
+> **[Full Usage Guide](docs/USAGE.md)** — Complete reference for every command, flag, tool parameter, config option, TLS fingerprinting guide, and recipes.
+>
+> **[Technical Architecture](docs/TECHNICAL.md)** — Architecture decisions and internals for contributors.
+
 ---
 
 ## Quick Start
@@ -102,7 +106,7 @@ Commands:
 ### Make a Request
 
 ```bash
-# Simple GET
+# Simple GET (returns body only by default)
 fetchr request https://httpbin.org/get
 
 # POST with JSON
@@ -111,19 +115,19 @@ fetchr request https://httpbin.org/post \
   -H "Content-Type: application/json" \
   -d '{"name": "John"}'
 
+# Full response (status, headers, body, duration)
+fetchr request https://httpbin.org/get -v
+
+# Structured JSON output (body auto-parsed when Content-Type is JSON)
+fetchr request https://httpbin.org/get --json
+fetchr request https://httpbin.org/get --json | jq '.body.headers'
+
 # Use Chrome fingerprint profile
 fetchr request https://tls.peet.ws/api/all --profile chrome
 
-# Custom JA3 fingerprint
-fetchr request https://example.com \
-  --ja3 "771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,0-23-65281-10-11-35-16-5-13-18-51-45-43-27-17513,29-23-24,0" \
-  --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0"
-
-# Print as curl command
-fetchr request https://httpbin.org/get --print-curl
-
-# Output as JSON
-fetchr request https://httpbin.org/get --json
+# Print as curl command (does not execute the request)
+fetchr request https://httpbin.org/post -X POST \
+  -H "Content-Type: application/json" -d '{"key":"value"}' --print-curl
 
 # Save response to file
 fetchr request https://httpbin.org/get -o response.txt
@@ -131,13 +135,9 @@ fetchr request https://httpbin.org/get -o response.txt
 # Through a proxy
 fetchr request https://httpbin.org/ip --proxy socks5://127.0.0.1:1080
 
-# Skip TLS verification
+# Skip TLS verification / don't follow redirects / force HTTP/1.1
 fetchr request https://self-signed.local/api --insecure
-
-# Don't follow redirects
 fetchr request https://httpbin.org/redirect/3 --no-redirect
-
-# Force HTTP/1.1
 fetchr request https://httpbin.org/get --http1
 ```
 
@@ -583,77 +583,6 @@ func main() {
 
 ---
 
-## Development
-
-### Prerequisites
-
-- Go 1.26+
-- [Task](https://taskfile.dev) (optional, for dev commands)
-
-### Dev Commands
-
-```bash
-task build         # Build binary
-task run           # Build + run MCP server (stdio)
-task run:sse       # Build + run MCP server (SSE)
-task inspect       # Open MCP inspector (stdio)
-task inspect:sse   # Open MCP inspector (SSE)
-task lint          # Run gofmt + go vet
-task tidy          # go mod tidy
-task upgrade       # Upgrade all dependencies
-task clean         # Remove build artifacts
-task version       # Print version info
-```
-
-### Project Structure
-
-```
-fetchr/
-├── cmd/fetchr/main.go         # CLI entry point (Cobra commands)
-├── pkg/curl/
-│   ├── client.go                # CycleTLS wrapper, Client struct
-│   ├── options.go               # RequestOptions, Cookie, Merge()
-│   ├── response.go              # Response struct, Format(), JSON()
-│   ├── curlcmd.go               # ToCurl() command builder
-│   └── logger.go                # Logger interface + implementations
-├── internal/
-│   ├── config/
-│   │   ├── config.go            # JSONC config parser + loader
-│   │   ├── paths.go             # Platform-aware config discovery
-│   │   └── default_config.jsonc # Embedded default config
-│   ├── mcp/
-│   │   ├── server.go            # MCP server setup
-│   │   ├── tools.go             # Tool handlers + schemas
-│   │   └── prompts.go           # Prompt definitions
-│   └── version/
-│       └── version.go           # Build-time version vars
-├── .goreleaser.yml              # Cross-compile config
-├── .github/workflows/release.yml
-├── Taskfile.yml                 # Dev tasks
-└── install.sh                   # One-click installer
-```
-
-### Release
-
-Tag a version and push to trigger the release workflow:
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-GoReleaser builds binaries for linux/darwin/windows (amd64 + arm64) and publishes the GitHub release automatically.
-
----
-
-## Documentation
-
-- **[Usage Guide](docs/USAGE.md)** — Complete reference for every command, flag, tool parameter, configuration option, TLS fingerprinting guide, Go package API, and recipes
-- **[Technical Architecture](docs/TECHNICAL.md)** — Architecture decisions, design rationale, and internals for contributors
-- **[Plan](docs/PLAN.md)** — Original design plan and implementation roadmap
-
----
-
 ## License
 
-MIT
+Source Available License — free to use, fork, and contribute. See [LICENSE](LICENSE) for details.

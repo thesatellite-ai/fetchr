@@ -88,6 +88,55 @@ func (r *Response) JSON() ([]byte, error) {
 	return json.MarshalIndent(r, "", "  ")
 }
 
+// JSONSmart returns JSON with the body parsed as a JSON object when Content-Type is application/json.
+// This makes the output jq-friendly.
+func (r *Response) JSONSmart() ([]byte, error) {
+	ct := r.Headers["Content-Type"]
+	if ct == "" {
+		ct = r.Headers["content-type"]
+	}
+	isJSON := strings.Contains(ct, "application/json")
+
+	if !isJSON || r.Body == "" {
+		return json.MarshalIndent(r, "", "  ")
+	}
+
+	// Parse body into raw JSON so it's not double-escaped
+	var parsedBody json.RawMessage
+	if err := json.Unmarshal([]byte(r.Body), &parsedBody); err != nil {
+		// If body isn't valid JSON, fall back to string
+		return json.MarshalIndent(r, "", "  ")
+	}
+
+	rj := smartResponseJSON{
+		Status:     r.Status,
+		Headers:    r.Headers,
+		Body:       parsedBody,
+		FinalURL:   r.FinalURL,
+		DurationMs: r.Duration.Milliseconds(),
+	}
+	for _, c := range r.Cookies {
+		rj.Cookies = append(rj.Cookies, cookieJSON{
+			Name:     c.Name,
+			Value:    c.Value,
+			Domain:   c.Domain,
+			Path:     c.Path,
+			Secure:   c.Secure,
+			HTTPOnly: c.HttpOnly,
+		})
+	}
+	return json.MarshalIndent(rj, "", "  ")
+}
+
+type smartResponseJSON struct {
+	Status     int               `json:"status"`
+	Headers    map[string]string `json:"headers"`
+	Body       json.RawMessage   `json:"body"`
+	Cookies    []cookieJSON      `json:"cookies,omitempty"`
+	FinalURL   string            `json:"final_url,omitempty"`
+	DurationMs int64             `json:"duration_ms"`
+}
+
 // BatchResult holds the result of a single request within a batch.
 type BatchResult struct {
 	Index    int       `json:"index"`
