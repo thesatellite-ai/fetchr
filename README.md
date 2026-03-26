@@ -19,7 +19,7 @@ Standard HTTP clients send a default TLS fingerprint that many websites use to d
 
 > **[Full Usage Guide](docs/USAGE.md)** — Complete reference for every command, flag, tool parameter, config option, TLS fingerprinting guide, and recipes.
 >
-> **[Technical Architecture](docs/TECHNICAL.md)** — Architecture decisions and internals for contributors.
+> **[Contributing](docs/CONTRIBUTING.md)** — Development setup, architecture, and internals for contributors.
 
 ---
 

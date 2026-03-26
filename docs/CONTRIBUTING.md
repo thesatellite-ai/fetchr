@@ -1,8 +1,8 @@
-# Technical Architecture
+# Contributing
 
 > For installation and usage, see the [README](../README.md). For the full command/parameter reference, see the [Usage Guide](USAGE.md).
 
-Architecture decisions, design rationale, and internals for contributors.
+Development setup, architecture decisions, and internals.
 
 ---
 
