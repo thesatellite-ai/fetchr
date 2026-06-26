@@ -1,0 +1,20 @@
+# fetchr
+
+> An open-source HTTP client with browser TLS fingerprinting (JA3/JA4, HTTP/2, QUIC) — available as a CLI, an MCP server that gives Claude Desktop & Claude Code real HTTP access, and an importable Go package. Requests look like Chrome or Firefox, so they pass anti-bot/TLS-fingerprint detection that blocks standard HTTP clients and curl.
+
+fetchr is open source (thesatellite-ai/fetchr), licensed Apache-2.0.
+
+## Docs
+- [README](https://github.com/thesatellite-ai/fetchr/blob/main/README.md): overview, install, CLI + MCP usage
+- [USAGE](https://github.com/thesatellite-ai/fetchr/blob/main/docs/USAGE.md): full command/flag/tool reference + fingerprinting guide
+- [CONTRIBUTING](https://github.com/thesatellite-ai/fetchr/blob/main/docs/CONTRIBUTING.md): development setup + architecture
+- [CHANGELOG](https://github.com/thesatellite-ai/fetchr/blob/main/CHANGELOG.md): release history
+
+## Install
+- AI skill: `npx skills add thesatellite-ai/fetchr`
+- Script (macOS/Linux): `curl -sL https://raw.githubusercontent.com/thesatellite-ai/fetchr/main/install.sh | sh`
+- Go: `go install github.com/thesatellite-ai/fetchr/cmd/fetchr@latest`
+- Releases: https://github.com/thesatellite-ai/fetchr/releases
+
+## Links
+- Repository: https://github.com/thesatellite-ai/fetchr
