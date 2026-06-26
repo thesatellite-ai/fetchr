@@ -2,11 +2,46 @@
 
 A fully-featured HTTP client with **TLS fingerprinting** (JA3/JA4, HTTP/2, QUIC) — available as a CLI tool, MCP server, and importable Go package.
 
+<p align="center">
+  <a href="https://github.com/thesatellite-ai/fetchr/releases"><img src="https://img.shields.io/github/v/release/thesatellite-ai/fetchr?sort=semver&label=release&color=0EA5E9" alt="Release"></a>
+  <img src="https://img.shields.io/badge/built%20with-Go-00ADD8?logo=go&logoColor=white" alt="Built with Go">
+  <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux-0EA5E9" alt="Platforms: macOS, Linux">
+  <img src="https://img.shields.io/badge/MCP-server-0EA5E9" alt="MCP server">
+  <a href="https://github.com/thesatellite-ai/fetchr/blob/main/LICENSE"><img src="https://img.shields.io/github/license/thesatellite-ai/fetchr?color=0EA5E9" alt="License: Apache-2.0"></a>
+  <a href="https://github.com/thesatellite-ai/fetchr/stargazers"><img src="https://img.shields.io/github/stars/thesatellite-ai/fetchr?style=social" alt="GitHub stars"></a>
+</p>
+
+fetchr is an **open-source HTTP client with browser TLS fingerprinting** (JA3/JA4, HTTP/2, QUIC) — a CLI, an **MCP server** that gives Claude Desktop, Claude Code, and other sandboxed AI assistants real HTTP access, and an importable **Go package**. Requests look identical to Chrome or Firefox, so they pass anti-bot and TLS-fingerprint detection that blocks standard HTTP clients.
+
+- [Why fetchr?](#why-fetchr)
+- [fetchr vs the alternatives](#fetchr-vs-the-alternatives)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [CLI Usage](#cli-usage)
+- [MCP Integration](#mcp-integration)
+- [MCP Tools](#mcp-tools)
+- [Configuration](#configuration)
+- [Go Package](#go-package)
+- [FAQ](#faq)
+- [License](#license)
+
 ## Why fetchr?
 
 **AI assistants can't make HTTP requests.** Claude Desktop, Claude Code, and other sandboxed AI tools block outbound network calls — they can't `curl`, fetch APIs, or check if a website is up. fetchr solves this as an MCP server, giving AI assistants full HTTP capabilities.
 
 **Websites block automated requests.** Standard HTTP clients send a default TLS fingerprint that anti-bot systems detect instantly. fetchr impersonates real browsers at the TLS level — matching their JA3 hash, HTTP/2 SETTINGS frame, header order, and more — so your requests look identical to Chrome or Firefox.
+
+### fetchr vs the alternatives
+
+| | **fetchr** | curl / standard HTTP client | Headless browser |
+|---|:---:|:---:|:---:|
+| Browser TLS fingerprint (JA3/JA4, HTTP/2, QUIC) | ✅ | ❌ | ✅ |
+| Passes anti-bot TLS detection | ✅ | ❌ | ⚠️ |
+| MCP server for AI assistants (Claude Desktop/Code) | ✅ | ❌ | ❌ |
+| Lightweight — no headless browser to drive | ✅ | ✅ | ❌ |
+| Single static binary | ✅ | ✅ | ❌ |
+| Export any request as a `curl` command | ✅ | n/a | ❌ |
+| Importable Go package | ✅ | ⚠️ | ❌ |
 
 ## Features
 
@@ -22,8 +57,6 @@ A fully-featured HTTP client with **TLS fingerprinting** (JA3/JA4, HTTP/2, QUIC)
 > **[Full Usage Guide](docs/USAGE.md)** — Complete reference for every command, flag, tool parameter, config option, TLS fingerprinting guide, and recipes.
 >
 > **[Contributing](docs/CONTRIBUTING.md)** — Development setup, architecture, and internals for contributors.
-
----
 
 ## Quick Start
 
@@ -83,7 +116,6 @@ Move-Item fetchr.exe C:\Windows\System32\
 sudo rm /usr/local/bin/fetchr
 ```
 
----
 
 ## CLI Usage
 
@@ -197,7 +229,6 @@ fetchr serve
 fetchr serve --transport sse --port :3000
 ```
 
----
 
 ## MCP Integration
 
@@ -248,7 +279,6 @@ task inspect
 npx @modelcontextprotocol/inspector ./fetchr serve
 ```
 
----
 
 ## MCP Tools
 
@@ -404,7 +434,6 @@ Make multiple HTTP requests concurrently. Returns a JSON array in the same order
 }
 ```
 
----
 
 ## Configuration
 
@@ -490,7 +519,6 @@ When logging is enabled, every request/response pair is recorded.
 
 **Webhook logging** POSTs the same JSON to a URL (fire-and-forget, non-blocking).
 
----
 
 ## Go Package
 
@@ -577,8 +605,28 @@ func main() {
 }
 ```
 
----
+## FAQ
+
+**Can AI assistants actually make HTTP requests through fetchr?**
+Yes. fetchr runs as an MCP server (stdio + SSE), so Claude Desktop, Claude Code, and other MCP-compatible assistants get real HTTP tools — GET/POST, headers, proxies, file downloads — even though they're otherwise sandboxed from the network.
+
+**How does it bypass bot detection?**
+It impersonates a real browser at the TLS layer — matching the JA3/JA4 hash, HTTP/2 SETTINGS frame, header order, and ALPN of Chrome or Firefox. Standard HTTP clients (including `curl`) send a default fingerprint that anti-bot systems flag instantly; fetchr's requests look identical to a real browser's.
+
+**Is this just a `curl` wrapper?**
+No. `curl` and standard clients can't change their TLS fingerprint, which is exactly what gets them blocked. fetchr does real browser-grade fingerprinting — and it can still *export* any request as an equivalent `curl` command when you want one.
+
+**Can I use it inside my own Go program?**
+Yes — import `pkg/curl` and make fingerprinted requests directly from Go, no CLI or server needed.
+
+**Is it free and open source?**
+Yes — licensed Apache-2.0. Free to use, modify, and distribute.
+
+**What platforms are supported?**
+A single static Go binary for macOS and Linux. No runtime dependencies, no headless browser.
 
 ## License
 
-Source Available License — free to use, fork, and contribute. See [LICENSE](LICENSE) for details.
+[Apache-2.0](LICENSE) — free to use, modify, and distribute.
+
+<sub><strong>fetchr</strong> — open-source HTTP client with browser TLS fingerprinting (JA3/JA4, HTTP/2, QUIC). A CLI, an MCP server that gives Claude Desktop &amp; Claude Code real HTTP access, and an importable Go package. Pass anti-bot detection that blocks standard HTTP clients and <code>curl</code>.</sub>
