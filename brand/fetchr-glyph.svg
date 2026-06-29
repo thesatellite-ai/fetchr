@@ -1,0 +1,7 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="fetchr glyph">
+  <g stroke="#0369A1" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <line x1="256" y1="150" x2="256" y2="300"/>
+    <path d="M200 252 L256 308 L312 252"/>
+    <path d="M150 322 V382 Q150 406 174 406 H338 Q362 406 362 382 V322"/>
+  </g>
+</svg>

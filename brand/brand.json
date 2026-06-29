@@ -1,0 +1,25 @@
+{
+  "name": "fetchr",
+  "tagline": "Browser-fingerprinting HTTP client + MCP server.",
+  "description": "An HTTP client with browser TLS fingerprinting (JA3/JA4, HTTP/2, QUIC) — a CLI, an MCP server that gives Claude Desktop & Claude Code real HTTP access, and an importable Go package. Requests look like Chrome or Firefox and pass anti-bot detection that blocks standard clients and curl.",
+  "repo": "thesatellite-ai/fetchr",
+  "homepage": "",
+  "language": "go",
+  "kind": "cli",
+  "license": "Apache-2.0",
+  "author": { "name": "khanakia", "github": "khanakia" },
+  "brand": {
+    "concept": "fetch-arrow",
+    "color": "sky",
+    "tile": ["#0EA5E9", "#0369A1"],
+    "fg": "#FFFFFF",
+    "accent": "#FBBF24",
+    "radius": 112
+  },
+  "fonts": { "display": "Space Grotesk", "sans": "Inter", "mono": "JetBrains Mono" },
+  "topics": ["http-client", "tls-fingerprinting", "ja3", "ja4", "mcp", "mcp-server", "anti-bot", "web-scraping", "cli", "golang", "claude", "ai-agents"],
+  "khanakia": {
+    "addToApps": true,
+    "badges": ["open-source", "free", "new"]
+  }
+}

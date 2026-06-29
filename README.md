@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="brand/png/icon-512.png" alt="fetchr logo — a fetch arrow landing in a tray" width="60" height="60">
+</p>
+
 # fetchr
 
 A fully-featured HTTP client with **TLS fingerprinting** (JA3/JA4, HTTP/2, QUIC) — available as a CLI tool, MCP server, and importable Go package.

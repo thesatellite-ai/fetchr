@@ -1,0 +1,9 @@
+:root{
+  --fetchr-tile-a:#0EA5E9; --fetchr-tile-b:#0369A1;
+  --fetchr-accent:#FBBF24; --fetchr-fg:#FFFFFF;
+  --fetchr-font-display:'Space Grotesk', 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --fetchr-font-sans:'Inter', ui-sans-serif, system-ui, sans-serif;
+  --fetchr-font-mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --fetchr-radius:16px;
+}
+[data-theme="dark"], .dark{ --fetchr-bg:#082F49; --fetchr-fg:#F0F9FF; }
